@@ -24,6 +24,7 @@ function App() {
         .then((res) => {
           setStates(res.data);
           setSelectedState("");
+          setCities([]); // Reset cities when the country changes
         })
         .catch((err) => console.error("Error fetching states:", err));
     }
@@ -80,7 +81,7 @@ function App() {
           value={selectedCity}
           onChange={(e) => setSelectedCity(e.target.value)}
           className="dropdown"
-          disabled={!selectedCountry && !selectedState}
+          disabled={!selectedCountry || !selectedState}
         >
           <option value="" disabled>
             Select City
@@ -92,16 +93,15 @@ function App() {
           ))}
         </select>
       </div>
-      {
-        selectedCity && (
-          <h2 className="result">You selected <span className="highlight">{selectedCity},</span>
+      {selectedCity && (
+        <h2 className="result">
+          You selected <span className="highlight">{selectedCity},</span>
           <span className="fade">
             {" "}
             {selectedState},{selectedCountry}
           </span>
-          </h2>
-        )
-        }
+        </h2>
+      )}
     </div>
   );
 }
