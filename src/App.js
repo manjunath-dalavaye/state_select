@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
 import axios from "axios";
+import "./App.css";
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -20,11 +20,14 @@ function App() {
   useEffect(() => {
     if (selectedCountry) {
       axios
-        .get(`https://crio-location-selector.onrender.com/country=${selectedCountry}/states`)
+        .get(
+          `https://crio-location-selector.onrender.com/country=${selectedCountry}/states`
+        )
         .then((res) => {
           setStates(res.data);
           setSelectedState("");
-          setCities([]); // Reset cities when the country changes
+          setCities([]);
+          setSelectedCity("");
         })
         .catch((err) => console.error("Error fetching states:", err));
     }
@@ -33,7 +36,9 @@ function App() {
   useEffect(() => {
     if (selectedCountry && selectedState) {
       axios
-        .get(`https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${selectedState}/cities`)
+        .get(
+          `https://crio-location-selector.onrender.com/country=${selectedCountry}/state=${selectedState}/cities`
+        )
         .then((res) => {
           setCities(res.data);
           setSelectedCity("");
@@ -81,7 +86,7 @@ function App() {
           value={selectedCity}
           onChange={(e) => setSelectedCity(e.target.value)}
           className="dropdown"
-          disabled={!selectedCountry || !selectedState}
+          disabled={!selectedCountry && !selectedState}
         >
           <option value="" disabled>
             Select City
@@ -95,7 +100,8 @@ function App() {
       </div>
       {selectedCity && (
         <h2 className="result">
-          You selected <span className="highlight">{selectedCity},</span>
+          You selected{" "}
+          <span className="highlight">{selectedCity},</span>
           <span className="fade">
             {" "}
             {selectedState},{selectedCountry}
